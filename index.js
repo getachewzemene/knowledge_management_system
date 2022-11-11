@@ -36,6 +36,7 @@ server.use(indexRoute);
 server.use(authRoute);
 server.use(adminRoute);
 server.use(mainRoute);
+
 server.use(moderatorRoute);
 server.use(postRoute);
 server.use(profileRoute);
