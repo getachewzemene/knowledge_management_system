@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+    integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+ <script src="/js/toggle_nav.js"></script>
+  <link rel="stylesheet" href="css/style.css" />
+  <title>Knowledge Management</title>
+</head>
+<body>
+  <header><%- include('./partials/index_header',{index:true,user:user}); %></header>
+  <!-- Carousel -->
+ <div id="carousel" class="carousel slide pt-5" data-bs-ride="carousel">
+    <!-- Indicators/dots -->
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carousel" data-bs-slide-to="0" class="active"></button>
+      <button type="button" data-bs-target="#carousel" data-bs-slide-to="1"></button>
+      <button type="button" data-bs-target="#carousel" data-bs-slide-to="2"></button>
+    </div>
+
+    <!-- The slideshow/carousel -->
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="/images/Slideroneresized.jpg" alt="slider image" class="d-block mt-4" style="width: 100%; height: 520px" />
+        <div class="carousel-caption">
+          <h5 class="text-light font-weight-bold">Shaping the Future of animal Health</h5>
+      <div class="carousel-content">
+            <p class="text-justify">Veterinary vaccines have had, and continue to have, a major role in protecting animal health and public health, reducing animal suffering, enabling efficient production of food animals <br> to feed the burgeoning human population, and greatly reducing the need for antibiotics to treat food and companion animals.Prominent examples include rabies vaccines and Rinderpest vaccines. Rabies vaccines for domestic animals and wildlife have nearly eliminated human rabies in developed countries.</p>
+          <a href="https://www.nvi.com.et/2017/03/08/shaping/" class="btn btn-primary text-center text-light">Read More</a>
+      </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="/images/Slidernew.jpg" alt="slider image 2" class="d-block" style="width: 100%; height: 520px" />
+        <div class="carousel-caption">
+          <h5 class="text-light font-weight-bold">Inauguration of NVI Veterinary Drug Manufacturing Plant</h5>
+            <div class="carousel-content">
+          <p class="text-justify">Inauguration of the Nations Pioneer Veterinary Drug Manufacturing Plant
+        The National Veterinary Institute (NVI) was established in 1964 under the then the Ministry of Agriculture with the objective of producing different vaccines to protect animals from various infectious diseases</p>
+        <a href="https://www.nvi.com.et/2017/03/08/shaping/" class="btn btn-primary text-center text-light">Read More</a>
+      </div> 
+      </div>
+      </div>
+    </div>
+
+    <!-- Left and right controls/icons -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon">
+        <i class="fa fa-angle-left fa-2x text-danger" aria-hidden="true"></i></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon">
+        <i class="fa fa-angle-right fa-2x text-danger" aria-hidden="true"></i>
+      </span>
+    </button>
+  </div>
+
+  <!-- end of carousel -->
+  <div class="row container-fluid m-3">
+    <div class="col-lg-8">
+    <% if(!event){ %>
+     <h3 class="text-center">No event found</h3>
+    <%} else {%>
+        <div class="row">
+        <h3 class="bg-primary text-center text-light" id="events" style="width: 75%;">Upcoming Events</h3>
+       <% for(var i=0; i<event.length;i++){%>
+        <% var fileName=event[i].filePath.split('\\').pop().split('/').pop();%>
+         <div class="col-lg-6">
+          <div class="card shadow mb-5 bg-white rounded card-event">
+            <div class="card-header m-0 p-0">
+              <img src="event_image/<%=fileName%>" class="img-fluid m-0 p-0" alt="event image" width="100%" height="300px" />
+            </div>
+            <div class="card-body">
+              <p class="card-text overflow-hidden event-title"><%=event[i].title%></p>
+            </div>
+            <div class="card-footer">
+              <a href="/event-detail?id=<%=event[i].id %> " class="btn btn-primary">Read more</a>
+            </div>
+          </div>
+        </div>
+      <%}%>
+      </div>
+    <%}%>
+      <h2  id="products" class="bg-primary text-center text-light" style="width: 75%;">Our Products</h2>
+      <div class="row mt-3">
+        <div class="col-lg-6">
+          <div class="card shadow mb-5 bg-white rounded">
+            <div class="card-header m-0 p-0">
+              <img src="/images/vaccine.jpg" class="img-fluid m-0 p-0" alt="header image" width="100%" height="300px" />
+            </div>
+            <div class="card-body">
+              <p class="card-text">Veterinary Vaccines</p>
+            </div>
+            <div class="card-footer">
+              <a href="https://www.nvi.com.et/2022/10/06/vaccine-products/" target="_blank" class="btn btn-primary">Read more</a>
+            </div>
+          </div>
+        </div>
+     <div class="col-lg-6">
+    <div class="card shadow mb-5 bg-white rounded">
+            <div class="card-header m-0 p-0">
+              <img src="/images/vaccine.jpg" class="img-fluid m-0 p-0" alt="header image" width="100%" height="300px" />
+            </div>
+            <div class="card-body">
+              <p class="card-text">Veterinary Drugs</p>
+            </div>
+            <div class="card-footer">
+              <a href="https://www.nvi.com.et/2022/10/06/veterinary-drug-products/" class="btn btn-primary">Read more</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2  id="services" class="bg-primary text-center text-light" style="width: 75%;">Our Services</h2>
+      <div class="row mt-3">
+        <div class="col-lg-6">
+          <div class="card shadow mb-5 bg-white rounded">
+            <div class="card-header m-0 p-0">
+              <img src="/images/tests.jpeg" class="img-fluid m-0 p-0" alt="header image" width="100%" height="300px" />
+            </div>
+            <div class="card-body">
+              <p class="card-text">Laboratory Test</p>
+            </div>
+            <div class="card-footer">
+              <a href="https://www.nvi.com.et/services/" target="_blank" class="btn btn-primary">Read more</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card shadow mb-5 bg-white rounded">
+            <div class="card-header m-0 p-0">
+              <img src="/images/training.jpeg" class="img-fluid m-0 p-0" alt="header image" width="100%" height="300px" />
+            </div>
+            <div class="card-body">
+              <p class="card-text">Training</p>
+            </div>
+            <div class="card-footer">
+              <a href="https://www.nvi.com.et/services/" target="_blank" class="btn btn-primary">Read more</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-header bg-primary text-center text-light h2">
+          News
+        </div>
+        <div class="card-body bg-light">
+          <ul>
+         <% if(news.length>0) {%>
+          <% for(var i=0;i< news.length; i++){%>
+            <li><a href="/news-detail?id=<%=news[i].id%>" class="text-title my-2"><%=news[i].title%></a></li>
+          <%}%>
+        <%}
+        else{%>
+          <h5 class="text-center text-danger">news not found</h5>
+          <%}%>
+        </ul>
+        </div>
+      </div>
+    </div>
+    <h2 id="about-us" class="bg-primary text-center text-light" style="width: 50%;">About Us</h2>
+    <div class="row mt-3">
+
+      <div class="col-4">
+        <h4 class="text-decoration-underline">Vision</h4>
+        <p>
+          By 2029 G.C the institute fulfills the national demand of
+          veterinary vaccine and drug and will be competitive Institute in
+          Africa.
+        </p>
+      </div>
+      <div class="col-4">
+        <h4 class="text-decoration-underline">Mission</h4>
+        <p>
+          Producing and supplying quality veterinary vaccines, drugs and
+          biological in affordable price for domestic market which support
+          the livestock sector, generating foreign currency by exporting
+          products and sustain profitability.
+        </p>
+      </div>
+      <div class="col-4">
+        <h4 class="text-decoration-underline">Core Values</h4>
+        <p>
+        <ul>
+          <li>Quality is our priority</li>
+          <li>Committed to customer satisfaction</li>
+          <li>Skilled, Experienced and Accountable Human Capital</li>
+          <li>Continuous Improvement</li>
+          <li>Complied to current Good Manufacturing and Laboratory Practices</li>
+        </ul>
+        </p>
+      </div>
+      <div class="col-lg-12">
+        <h4 class="text-decoration-underline">History</h4>
+        <p>National Veterinary Institute (NVI) was established at Bishoftu /Debrezeit in 1964 with 40 persons under the
+          Ministry of Agriculture, getting technical assistance from the French Government through the French Veterinary
+          Mission in Ethiopia. At that time, the real value of the NVI for the welfare of the national animal resources
+          and for the African continent is not well known by most of the people. Today it is one of the most well known
+          veterinary vaccine producing institutions in Africa with its multidisciplinary professional staff having long
+          years of experience.
+
+          The infrastructure of NVI is well developed and playing an important role in the attraction of international
+          institution, the Pan African Veterinary Vaccine Control Center (PANVAC) which is under the African Union.
+          Moreover, it has been given the responsibility to produce and supply enough vaccines for PTA (Preferential
+          Trade Area) countries of Eastern, Western and Southern Africa. The institute has reached the level of using
+          state of the art equipment’s and technologies for biological production and vaccine related research.
+
+          Since the creation of the institute, several million doses of different vaccines have been produced and
+          dispatched to protect millions of animals from various infectious diseases. According to the evaluation
+          performed in 1983 by IEMVT (Institute D’Elvage et de Medicine Veterinaire de pays Tropicaux) on the production
+          potential of African laboratories, NVI was graded as the biggest vaccine producing center of all veterinary
+          laboratories in tropical Africa.
+
+          Moreover the institute won the International Gold Mercury Award in 1982 in recognition of its positive
+          contribution to national development at the 22nd conference for peace and cooperation.
+
+          Gold Medal award from the Ministry of Science Technology.
+
+          Different medals and certificate award from the Government and non Government Organizations, Professional
+          Associations and Universities.
+
+          The National Veterinary Institute was organized as public enterprise by the Proclamation No. 25/1992 and
+          Council of Ministers Regulations No. 52/1999.</p>
+      </div>
+    </div>
+    <h2 id="contact" class="bg-primary text-center text-light" style="width: 50%;">Contacts</h2>
+    <div class="row mt-3">
+      <p>
+        Phone: <a href="51-114-33-84-11">51-114-33-84-11</a></p>
+      <p>Fixed Line : 251-114-33-84-11/16</p>
+
+      <p>Mobile : 0903-04-88-88</p>
+
+      <p>Fax: 251 -114-33-93-00</p>
+
+      <p>P.O. Box : 19, Bishoftu , Ethiopia</p>
+
+      </p>
+      <a href="mailto:nvi-rt@ethionet.et"> Email: E-Mail:nvi-rt@ethionet.et , info@nvi.com.et</a>
+    </div>
+  </div>
+
+</body>
+  <%- include('./partials/footer'); %>
+</html>

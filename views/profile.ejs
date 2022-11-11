@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+      integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+    <title>Profile</title>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-lg index_header text-light">
+        <div class="container-fluid">
+          <div class="navbar-nav text-light index-nav">
+            <a href="/" class="nav-item nav-link">Dashboard</a>
+             <a href="/main" class="nav-item nav-link">Post</a>
+          </div>
+          <div class="navbar-nav ms-auto index-nav">
+            <h5 class="my-3"><%= user.firstName%></h5>
+            <a href="/logout" class="nav-item nav-link"
+              ><i class="fa fa-power-off mx-2"></i>Logout</a
+            >
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main>
+         <div class="col-lg-6 my-2 mx-4">
+          <div class="card shadow mb-5 bg-white rounded">
+            <div class="card-body">
+              <h4>Total Post <span class="badge bg-danger"><%=user.userPost.length%></span></h4>
+            </div>
+          </div>
+        </div>
+      <% if(user.userPost.length>0) {%>
+        <div class="row m-0 p-0">
+            <% user.userPost.forEach((post)=>{ %>
+             <div class="col-lg-4 col-md-6 col-sm-12">
+                  <div class="post-pending card shadow mb-5 bg-white rounded">
+                    <div class="post-header">
+                        <div class="post-cover">
+                            <% if(post.filePath!==null){%> <% var
+                  fileName=post.filePath.split('\\').pop().split('/').pop();
+                  var fileType= post.filePath.split('.').pop();%> <%
+                  if(fileType==="jpg" || fileType==="png" || fileType==="jpeg")
+                  { %>
+                            <div class="post-image">
+                                <img src="posts/<%=fileName%>" alt="post image" width="100%" height="300px" />
+                            </div>
+
+                            <%}%> <% if(fileType==="pdf"){ %>
+                            <p class="mx-2">
+                                pdf file not supported
+                                <a href="posts/<%=fileName%>"> Click To Download</a>
+                            </p>
+                            <% }%> <%}%>
+                        </div>
+                    </div>
+                 <div class="post-body mx-2">
+                   <div class="post-title">
+                     <h1><%= post.title%></h1>
+                        </div>
+                    <div class="post-summary">
+                            <p><%= post.content%></p>
+                     </div>
+
+                    </div>
+                    <div class="post-footer">
+                       <div class="row">
+                        <div class="col-6">
+                            <button class="btn btn-primary my-2 toggle-modal" data-id="<%=post.id%>"
+                                data-bs-toggle="modal" data-bs-target="#updatePost<%=post.id%>">UpdatePost</button>
+                       </div>
+                     
+                         <div class="col-6">
+
+                           <form action="/profile/post/delete" method="post">
+                            <input type="hidden" name="postId" value="<%=post.id%>"/>
+                             <button class="btn btn-danger my-2">Delete
+                                Post</button>
+                           </form>
+                         </div>
+                       </div>
+                    </div>
+                </div>
+             </div>
+        <div class="modal" id="updatePost<%= post.id %>" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title text-center">Update Post</h4>
+              <a class="close" data-bs-dismiss="modal" aria-hidden="true">
+                <i class="fa fa-times icon bg-danger text-white"></i>
+              </a>
+            </div>
+            <div class="modal-body">
+              <form
+                name="updatePostForm"
+                class="form-add-post"
+                action="/profile/post/update"
+                method="post"
+                role="form"
+                data-toggle="validator"
+              >
+              <input type="hidden" name="postId" value="<%=post.id%>"/>
+                <div class="input-container">
+                  <input
+                    class="input-field"
+                    type="text"
+                    name="title"
+                    class="form-control"
+                    placeholder="enter post title"
+                    value="<%=post.title%>"
+                    required
+                    autofocus
+                  />
+                </div>
+                <div class="input-container">
+                  <!-- <i class="fa fa-description icon"></i> -->
+                  <textarea
+                    name="content"
+                    rows="4"
+                    class="form-control"
+                    placeholder="enter post content"
+                 
+                    autofocus
+                  ><%=post.content%></textarea>
+                </div>
+                <div class="row my-4">
+                  <div class="col">
+                    <button
+                      class="btn btn-sm btn-login btn text-center"
+                      type="submit"
+                    >
+                      Update
+                    </button>
+                  </div>
+                  <div class="col text-center">
+                    <button
+                      class="btn btn-sm btn-login btn text-center"
+                      type="reset"
+                    >
+                      Reset
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-danger"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+            <%});%>
+      <%} else{%>
+      <h4 class="text-center text-danger m-4 p-4">Post not found</h4>
+      <%}%>
+      <div class="modal" id="updatePost" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title text-center">Add Post</h4>
+              <a class="close" data-bs-dismiss="modal" aria-hidden="true">
+                <i class="fa fa-times icon bg-danger text-white"></i>
+              </a>
+            </div>
+            <div class="modal-body">
+              <form
+                name="updatePostForm"
+                class="form-add-post"
+                action="/main/post/add"
+                method="post"
+                role="form"
+                data-toggle="validator"
+                enctype="multipart/form-data"
+              >
+                <div class="input-container">
+                  <input
+                    class="input-field"
+                    type="text"
+                    name="title"
+                    class="form-control"
+                    placeholder="enter post title"
+                    value=""
+                    required
+                    autofocus
+                  />
+                </div>
+                <div class="input-container">
+                  <!-- <i class="fa fa-description icon"></i> -->
+                  <textarea
+                    name="content"
+                    rows="4"
+                    class="form-control"
+                    placeholder="enter post content"
+                    value=""
+                    autofocus
+                  ></textarea>
+                </div>
+                <div class="input-container">
+                  <i class="fa fa-file icon"></i>
+                  <input
+                    class="input-field"
+                    type="file"
+                    name="file"
+                    class="form-control"
+                    placeholder="import file"
+                    accept=".jpg, .jpeg, .png,.pdf, .doc, .docx,.mp4, .3gp"
+                    autofocus
+                  />
+                </div>
+                <div class="row my-4">
+                  <div class="col">
+                    <button
+                      class="btn btn-sm btn-login btn text-center"
+                      type="submit"
+                    >
+                      Add
+                    </button>
+                  </div>
+                  <div class="col text-center">
+                    <button
+                      class="btn btn-sm btn-login btn text-center"
+                      type="reset"
+                    >
+                      Reset
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-danger"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+     <% if (locals.message && locals.message!='') { %>
+            <script language="javascript">
+                alert( "<%= message %>" );
+            </script>
+            <% } %>
+    <%- include('./partials/footer'); %>
+  </body>
+</html>

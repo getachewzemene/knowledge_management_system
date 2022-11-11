@@ -1,0 +1,66 @@
+<nav
+  class="navbar fixed-top navbar-expand-lg index_header text-light"
+  id="index_nav"
+>
+  <div class="container-fluid">
+    <div class="navbar-brand">
+      <% if(index==false) { %>
+
+      <i
+        class="fa-solid fa-2x fa-bars text-light mx-3"
+        onclick="openSidebar()"
+      ></i>
+
+      <%}%> <% if(index===true && typeof index !== 'undefined') { %>
+      <a href="/" class="text-decoration-none">
+        <i class="h1 text-light"
+          >K<i class="h2 text-light">M</i><i class="h3 text-danger">S</i></i
+        ></a
+      >
+      <%}%>
+    </div>
+    <button
+      type="button "
+      class="navbar-toggler"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarCollapse"
+    >
+      <span class="navbar-toggler-icon text-white"></span>
+    </button>
+    <div class="collapse navbar-collapse navbar-collapse" id="navbarCollapse">
+      <div class="navbar-nav text-light index-nav">
+        <% if(index==false) { %>
+        <a href="/" class="nav-item nav-link mx-3">Dashboard</a>
+        <%} else {%>
+        <a href="#events" class="nav-item nav-link active">Events</a>
+        <a href="#products" class="nav-item nav-link">Products</a>
+        <a href="#services" class="nav-item nav-link">Services</a>
+        <a href="#about-us" class="nav-item nav-link">About Us</a>
+        <a href="#contact" class="nav-item nav-link">Contact</a>
+        <a href="/ebook" class="nav-item nav-link">Ebook</a>
+        <a href="/help" class="nav-item nav-link" tabindex="-1">Help</a>
+        <%}%>
+      </div>
+      <% if(index==true) { %>
+      <div class="navbar-nav ms-auto index-nav">
+        <%if(user!=null){%> <%if(user.role=="admin"){%>
+        <a href="/admin" class="nav-item nav-link mx-3">Admin</a>
+        <%}else if(user.role=="moderator"){%>
+        <a href="/moderator" class="nav-item nav-link mx-3">Moderator</a>
+        <%} else{%>
+        <a href="/main" class="nav-item nav-link mx-3">Post</a>
+        <%}%> <%}else{%>
+        <a href="/login" class="nav-item nav-link mx-3"
+          ><i class="fa fa-sign-in mx-2"></i>Login</a
+        ><%}%>
+      </div>
+      <%}%> <% if(index==false) { %>
+      <div class="navbar-nav ms-auto index-nav">
+        <a href="/logout" class="nav-item nav-link mx-3"
+          ><i class="fa fa-sign-out mx-2"></i>Logout</a
+        >
+      </div>
+      <%}%>
+    </div>
+  </div>
+</nav>

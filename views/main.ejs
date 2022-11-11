@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="/js/toggle_nav.js"></script>
+  <script src="/js/show_comment.js"></script>
+    <script src="/js/toggle_password.js"></script>
+  <script src="/js/form_validator.js"></script>
+  <title>Main</title>
+</head>
+
+<body>
+  <div id="sidebar" class="custom-sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeSidebar()">X</a>
+    <div class="mt-4 pt-4">
+      <a href="/" class="my-2  bg-secondary"><i class="fa fa-home mx-2"></i>Dashboard</a>
+      <a class="my-2" data-bs-toggle="modal" data-bs-target="#addPost"><i class="fa fa-add mx-2"></i>Add post</a>
+      <a href="/profile" class="my-2"><i class="fa fa-person mx-2"></i>Profile</a>
+      <a class="my-2" data-bs-toggle="modal" data-bs-target="#changePassword"><i class="fa fa-key mx-2"></i>Change Password</a>
+      <a href="/logout" class="text-danger nav-logout"><i class="fa fa-power-off mx-2"></i>Logout</a>
+    </div>
+  </div>
+  <main id="main">
+    <header>
+      <nav class="navbar navbar-expand-lg index_header text-light">
+        <div class="container-fluid">
+          <div class="navbar-nav text-light index-nav">
+            <i class="fa-solid fa-2x fa-bars text-light my-2" onclick="openSidebar()"></i>
+            <a href="/" class="nav-item nav-link">Dashboard</a>
+          </div>
+          <div class="navbar-nav ms-auto index-nav">
+            <a href="/logout" class="nav-item nav-link"><i class="fa fa-power-off mx-2"></i>Logout</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="main-container row my-2" style="margin-left: 30px;">
+      <div class="col-lg-4 my-2">
+        <div class="card shadow mb-5 bg-white rounded">
+          <div class="card-body text-center" style="background-color: #397904;">
+            <h4 class="text-light">Total Users <span class="badge bg-danger"><%=users.length%></span></h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 my-2">
+        <div class="card shadow mb-5 bg-white rounded">
+          <div class="card-body text-center" style="background-color: #607697;">
+            <h4 class="text-light">Total Posts <span class="badge bg-danger"><%=posts.length%></span></h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 my-2">
+        <div class="card shadow mb-5 bg-white rounded">
+          <div class="card-body text-center" style="background-color: rgb(156, 90, 156)">
+            <h4 class="text-light">Total Contribution <span class="badge bg-danger"><%=comments.length%></span></h4>
+          </div>
+        </div>
+      </div>
+      <% if(users.length>0){%>
+      <div class="row">
+
+        <div class="col-lg-4">
+          <h4>Total User <span class="badge bg-danger">Gender</span></h4>
+          <canvas id="barChart" style="width: 100%; max-width: 500px; height: 300px"></canvas>
+        </div>
+
+        <div class="col-lg-4">
+          <canvas id="pieChartGender" style="width: 100%; max-width: 300px; height: 200px"></canvas>
+        </div>
+        <div class="col-lg-4">
+          <h4>Users In <span class="badge bg-danger">Each Department</span></h4>
+          <canvas id="pieChartUserDepartment" style="width: 100%; max-width: 300px; height: 200px"></canvas>
+        </div>
+      </div>
+
+      <%}%>
+          <div class="row mt-3 mb-2">
+          <div class="d-flex justify-content-between">
+            <button
+            type="button"
+            class="btn btn-primary mx-4 mb-3"
+            style="width: 150px"
+          >
+            Posts <span class="badge bg-danger"><%=posts.length%></span></span>
+      </button>
+      <form name="searchForm" class="form" method="get" action="javascript:void(0);" onsubmit="showSearch()">
+        <div class="input-container">
+          <i class="fa fa-search bg-primary icon mb-3"></i>
+          <div class="input-container">
+            <input class="input-field" list="catagorys" name="category" id="category" class="form-control" placeholder="search post category like public or IT" value="" required autofocus>
+            <datalist id="catagorys">
+              <% for(var i=0;i< posts.length; i++ ){%>
+              <% for(var j=0; j<posts[i].postTargetGroup.length; j++){%>
+              <option value="<%=posts[i].postTargetGroup[j].department%>"></option>
+              <%}%>
+                    <%}%>
+            </datalist>
+            <input type="submit" value="Submit" class="btn btn-primary mx-2" />
+          </div>
+      </form>
+    </div>
+    </div>
+    <div id="search-post" style="display: none;">
+      <p> Search post</p>
+    </div>
+    <div id="all-post" class="row">
+      <% if(posts.length > 0){%>
+      <% for(var i=0; i < posts.length; i++) { %>
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="post-container card shadow mb-5 bg-white rounded">
+          <div class="post-header">
+            <div class="post-cover">
+              <div class="post-author">
+                <h3>
+                  <i class="fa fa-user-circle mx-2" aria-hidden="true"></i><%=posts[i].postUser.firstName + " " +
+                    posts[i].postUser.lastName%>
+                </h3>
+              </div>
+              <% if(posts[i].filePath!==null){%> <% var
+                fileName=posts[i].filePath.split('\\').pop().split('/').pop();
+                var fileType= posts[i].filePath.split('.').pop();%> <%
+                if(fileType==="jpg" || fileType==="png" || fileType==="jpeg") {
+                %>
+              <div class="post-image">
+                <img src="posts/<%=fileName%>" alt="post image" width="100%" height="300px" />
+              </div>
+
+              <%}%> <% if(fileType==="pdf"){ %>
+              <p class="mx-2">
+                pdf file not supported
+                <a href="posts/<%=fileName%>"> Click To Download</a>
+              </p>
+              <% }%> <%}%>
+              </div>
+            </div>
+
+            <div class="post-body mx-2">
+              <div class="post-title">
+                <h1><%= posts[i].title%></h1>
+            </div>
+            <div class="post-summary">
+              <p><%= posts[i].content%></p>
+            </div>
+            <div class="post-tags">
+              <p class="text-primary text-decoration-underline h4">Target Group</p>
+              <ul>
+                <% for(var j=0; j<posts[i].postTargetGroup.length; j++){ %>
+                <li><a href="#!"><%= posts[i].postTargetGroup[j].department%></a></li>
+                <%}%>
+                </ul>
+              </div>
+            </div>
+
+            <div class="post-footer m-2">
+              <ul>
+                <li class="published-date" style="margin-left: 18px;overflow:hidden"><%=posts[i].createdAt%></li>
+                <li class="comments mx-2 my-2">
+                  <a href="#" <% var id = posts[i].id;%>><i class="fa fa-comment fa-2x" onclick="showComment('<%=id%>');"></i><span class="numero h6 fontweight-bold"><%=posts[i].postComment.length%></span></a>
+                </li>
+                <li class="">
+                  <a href="/main/post/detail?id=<%=posts[i].id %>" class="btn btn-primary text-light mt-0 mb-5 text-capitalize">Detail</a>
+                </li>
+              </ul>
+              <div class="comment-content mx-2 my-4" id="<%=id%>">
+                <% if(posts[i].postComment.length>0) {%>
+                <%for(var k=0;k<posts[i].postComment.length;k++ ){%>
+                <div style="background-color: #C0C0C2;">
+                  <p><i class="fa fa-user icon mr-2"></i> <span class="h5 fontweight-bold mr-2"><%=posts[i].postComment[k].commentUser.firstName %>:</span><%=posts[i].postComment[k].content%></p>
+                </div>
+                <%}%> 
+            <%}%>
+                <form class="form" method="post" action="/main/post/comment/add">
+                  <div class="input-container p-0 mx-0 my-3">
+                    <input type="hidden" name="postId" value="<%=id%>" />
+                    <input type="text" name="comment" maxlength="500" placeholder="comment here" class="form-control" />
+                    <input type="submit" value="post" class="btn btn-primary mx-3" />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%} %> <% } else {%>
+        <h4 class="text-danger text-center">post not found</h4>
+        <%}%>
+        </div>
+      </div>
+    </div>
+      <!-- add post modal -->
+      <div class="modal" id="addPost" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title text-center">Add Post</h4>
+              <a class="close" data-bs-dismiss="modal" aria-hidden="true">
+                <i class="fa fa-times icon bg-danger text-white"></i>
+              </a>
+            </div>
+            <div class="modal-body">
+              <form
+                name="addPostForm"
+                class="form-add-post"
+                action="/main/post/add"
+                method="post"
+                role="form"
+                data-toggle="validator"
+                enctype="multipart/form-data"
+              >
+                <div class="input-container">
+                  <input
+                    class="input-field"
+                    type="text"
+                    name="title"
+                    class="form-control"
+                    placeholder="enter post title"
+                    value=""
+                    required
+                    autofocus
+                  />
+                </div>
+                <div class="input-container">
+                  <!-- <i class="fa fa-description icon"></i> -->
+                  <textarea
+                    name="content"
+                    rows="4"
+                    class="form-control"
+                    placeholder="enter post content"
+                    value=""
+                    autofocus
+                  ></textarea>
+                </div>
+                <div class="input-container">
+                  <i class="fa fa-file icon"></i>
+                  <input
+                    class="input-field"
+                    type="file"
+                    name="file"
+                    class="form-control"
+                    placeholder="import file"
+                    accept=".jpg, .jpeg, .png,.pdf, .doc, .docx,.mp4, .3gp"
+                    autofocus
+                  />
+                </div>
+                <div class="row my-4">
+                  <div class="col">
+                    <button
+                      class="btn btn-sm btn-login btn text-center"
+                      type="submit"
+                    >
+                      Add
+                    </button>
+                  </div>
+                  <div class="col text-center">
+                    <button
+                      class="btn btn-sm btn-login btn text-center"
+                      type="reset"
+                    >
+                      Reset
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-danger"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class="modal" id="changePassword" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title text-center">Change Password</h4>
+              <a class="close" data-bs-dismiss="modal" aria-hidden="true">
+                <i class="fa fa-times icon bg-danger text-white"></i>
+              </a>
+            </div>
+            <div class="modal-body">
+              <form
+                name="addPostForm"
+                class="fom-change-password"
+                action="/main/change-password"
+                method="post"
+                role="form"
+                data-toggle="validator"
+              >
+              <input type="hidden" value="<%=user.id%>" name="userId"/>
+                 <div class="input-container">
+                  <i class="fa fa-lock icon"></i>
+                  <input
+                    class="input-field"
+                    id="oldPassword"
+                    type="password"
+                    name="oldPassword"
+                    class="form-control"
+                    placeholder="enter old password"
+                    onblur="return validateAddUser();"
+                    onkeyup="return validateAddUser();"
+                    required
+                  />
+                </div>
+                <div class="input-container">
+                  <i class="fa fa-lock icon"></i>
+                  <input
+                    class="input-field"
+                    id="newPassword"
+                    type="password"
+                    name="newPassword"
+                    class="form-control"
+                    placeholder="enter new password"
+                    onblur="return validateAddUser();"
+                    onkeyup="return validateAddUser();"
+                    required
+                  />
+                </div>
+                 <div class="input-container">
+                        <input id="password" type="checkbox" onclick="togglePassword();"
+                          style="width: 20px;height:20px; margin-right:5px" />Show Password
+                      </div>
+                <div class="row my-4">
+                  <div class="col">
+                    <button
+                      class="btn btn-sm btn-login btn text-center"
+                      type="submit"
+                    >
+                      Change
+                    </button>
+                  </div>
+                  <div class="col text-center">
+                    <button
+                      class="btn btn-sm btn-login btn text-center"
+                      type="reset"
+                    >
+                      Reset
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-danger"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% if (locals.message && locals.message!='') { %>
+        <script language="javascript">
+          alert("<%= message %>");
+        </script>
+
+  </main>
+  <% } %> <%- include('./partials/footer'); %>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <!-- <script src="js/login_modal.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"></script>
+
+  <script>
+    var xValues = ["Male", "Female"];
+    var yValues = ['<%=totalMale%>', '<%=totalFemale%>'];
+    var barColors = ["green", "blue"];
+
+    new Chart("barChart", {
+      type: "bar",
+      data: {
+        labels: xValues,
+        datasets: [{
+          backgroundColor: barColors,
+          data: yValues,
+        }, ],
+      },
+      options: {
+        title: {
+          display: true,
+          skipNull: true,
+          text: "User based on gender",
+        },
+      },
+    });
+  </script>
+  <script>
+    var xValues = ["Male", "Female"];
+    var yValues = ['<%=totalMale%>', '<%=totalFemale%>'];
+    var barColors = ["#b91d47", "#00aba9", ];
+    new Chart("pieChartGender", {
+      type: "pie",
+      data: {
+        labels: xValues,
+        datasets: [{
+          backgroundColor: barColors,
+          data: yValues,
+        }, ],
+      },
+      options: {
+        title: {
+          display: true,
+          skipNull: true,
+          text: "User based on gender",
+        },
+      },
+    });
+  </script>
+  <script>
+    let userDepartment = <%-JSON.stringify(userDepartment)%>;
+    const userCount = [];
+    const department = []
+    const Color = [];
+    for (var i = 0; i < userDepartment.length; i++) {
+      department.push(userDepartment[i].department);
+      userCount.push(userDepartment[i].count);
+      Color.push("#" + Math.floor(Math.random() * 16777215).toString(16));
+    }
+
+    console.log(userDepartment.length);
+    var xValues = department;
+    var yValues = userCount;
+
+    new Chart("pieChartUserDepartment", {
+      type: "pie",
+      data: {
+        labels: xValues,
+        datasets: [{
+          backgroundColor: Color,
+          data: yValues,
+        }, ],
+      },
+      options: {
+        title: {
+          display: true,
+          skipNull: true,
+          text: "User each department",
+        },
+      },
+    });
+  </script>
+
+  <script>
+    function showSearch() {
+      var searchPost = document.getElementById("search-post");
+      var allPost = document.getElementById("all-post");
+
+      searchPost.style.display = "block";
+      allPost.style.display = "none";
+      let post = <%-JSON.stringify(posts)%>;
+      let card = "Post Not found";
+      var category = document.searchForm.category.value;
+      console.log(post);
+      for (var i = 0; i < post.length; i++) {
+        for (j = 0; j < post[i].postTargetGroup.length; j++) {
+          if (post[i].postTargetGroup[j].department === category) {
+            var html = `<div class="col-lg-6 col-md-12 col-sm-12">
+              <div class="post-container card shadow mb-5 bg-white rounded">
+              <div class="card-header">
+              <h3> ${post[i].postUser.firstName}</h3></div>
+              <div class="card-body"> 
+              <h4> ${post[i].title}</h3></div>
+              <div class="card-footer">
+              <a href="#" class="mx-2 h3"> ${post[i].postTargetGroup[j].department}</a></div>
+               <div class="mx-5 w-75">
+                 <a href="/main/post/detail?id=${post[i].id}" class="btn btn-primary text-light mt-0 mb-5">Detail</a>
+               </div>
+              </div></div>`
+            searchPost.insertAdjacentHTML("afterend", html);
+          }
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+    integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+    integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="/js/toggle_nav.js"></script>
+  <script src="/js/form_validator.js"></script>
+  <title>Admin</title>
+
+  <script>
+    function togglePassword(id) {
+  var password = document.getElementById(id);
+
+  if (password.type === "password") {
+    password.type = "text";
+  }
+ else {
+    password.type = "password";
+  }
+}
+  </script>
+</head>
+
+<body>
+  <div id="sidebar" class="custom-sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeSidebar()">X</a>
+    <a href="/" class="bg-secondary mx-2 mt-4"><i class="fa fa-home mx-2"></i>Dashboard</a>
+    <a href="/main" class="mx-2"><i class="fa fa-sticky-note mx-2"></i>Post</a>
+    <a href="#!" data-bs-toggle="modal" data-bs-target="#addUser"><i class="fa fa-add mx-2"></i>Add User</a>
+    <a href="#!" data-bs-toggle="modal" data-bs-target="#addEvent"><i class="fa fa-add mx-2"></i>Add Event</a>
+        <a href="#!" data-bs-toggle="modal" data-bs-target="#addNews"><i class="fa fa-add mx-2"></i>Add News</a>
+    <a href="#!" data-bs-toggle="modal" data-bs-target="#importData"><i class="fa fa-add mx-2"></i>Import Data</a>
+    <a href="/logout" class="text-danger nav-logout"><i class="fa fa-power-off mx-2"></i>Logout</a>
+  </div>
+  <main id="main">
+    <header>
+      <nav class="navbar navbar-expand-lg index_header text-light">
+        <div class="container-fluid">
+          <div class="navbar-nav text-light index-nav">
+            <i class="fa-solid fa-2x fa-bars text-light my-2" onclick="openSidebar()"></i>
+            <a href="/" class="nav-item nav-link">Dashboard</a>
+            <a href="/main" class="nav-item nav-link">Post</a>
+          </div>
+          <div class="navbar-nav ms-auto index-nav">
+            <a href="/logout" class="nav-item nav-link"><i class="fa fa-power-off mx-2"></i>Logout</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="main-container m-4">
+      <%if(totalUser>0) {%>
+      <div class="row mx-5">
+        <div class="col-lg-4 col-md-4 col-sm-6 my-2">
+          <div class="card rounded shadow">
+            <div class="card-body text-center" style="background-color: #397904;">
+              <h4 class="text-light">Total Users <span class="badge bg-danger"><%=totalUser%></span></h4>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-6 my-2">
+          <div class="card  rounded shadow">
+            <div class="card-body text-center" style="background-color: #607697;">
+              <h4 class="text-light">Total Posts <span class="badge bg-danger"><%=post.length%></span></h4>
+            </div>
+          </div>
+        </div>
+         <div class="col-lg-4 col-md-4 col-sm-6 my-2">
+          <div class="card  rounded shadow">
+            <div class="card-body text-center" style="background-color: rgb(156, 90, 156)">
+              <h4 class="text-light">Total News <span class="badge bg-danger"><%=news.length%></span></h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3 mx-5">
+        <h5>
+          Users <span class="badge bg-danger">Top</span>
+        </h5>
+     
+        <table class="table table-responsive table-striped mr-4" style="margin-left: 10px;">
+          <thead class="bg-primary text-light">
+            <th>No.</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Salary</th>
+            <th>Department</th>
+            <th>Role</th>
+            <th>Action</th>
+          </thead>
+          <tbody>
+               <% for(var i=0;i<user.length;i++) {%>
+            <tr>
+              <td><%=user[i].id%></td>
+              <td><%=user[i].firstName + " " +
+                    user[i].lastName%></td>
+              <td><%=user[i].email%></td>
+              <td><%=user[i].phone%></td>
+              <td><%=user[i].salary%></td>
+              <td><%=user[i].department%></td>
+              <td><%=user[i].role%></td>
+              <td>
+                <form action="/admin/user/delete" method="post" class="form-inline">
+                  <a href="/edit/<%=user[i].id%>" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                    data-bs-target="#updateUser<%=user[i].id%>">Edit</a>
+                  <input type="hidden" name="id" value="<%=user[i].id%>" />
+                  <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+              </td>
+            </tr>
+
+            <!-- update user modal -->
+            <div class="modal" id="updateUser<%= user[i].id %>" role="dialog">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title text-center">Update User</h4>
+                    <a class="close" data-bs-dismiss="modal" aria-hidden="true">
+                      <i class="fa fa-times icon bg-danger text-white"></i>
+                    </a>
+                  </div>
+                  <div class="modal-body">
+                    <form name="updateUserForm" class="form-update" action="/admin/user/update" method="post"
+                      onsubmit="return(validateAddUser());" role="form" data-toggle="validator">
+                      <input type="hidden" name="id" value="<%=user[i].id%>" />
+                      <div class="input-container">
+                        <i class="fa fa-person icon"></i>
+                        <input class="input-field" type="text" name="firstName" class="form-control"
+                          placeholder="enter first name" onblur="return validateAddUser();"
+                          onkeyup="return validateAddUser();" required value="<%=user[i].firstName%>" autofocus />
+                      </div>
+                      <div class="input-container">
+                        <i class="fa fa-person icon"></i>
+                        <input class="input-field" type="text" name="lastName" class="form-control"
+                          placeholder="enter last name" onblur="return validateAddUser();"
+                          onkeyup="return validateAddUser();" required value="<%=user[i].lastName%>" autofocus />
+                      </div>
+                      <div class="input-container">
+                        <i class="fa fa-envelope icon"></i>
+                        <input class="input-field" type="email" name="email" class="form-control"
+                          placeholder="enter email address" onblur="return validateAddUser();"
+                          onkeyup="return validateAddUser();" required value="<%=user[i].email%>" autofocus />
+                      </div>
+                       <div class="input-container">
+                        <i class="fa fa-envelope icon"></i>
+                        <input id = "<%=user[i].id%>" class="input-field" type="password" name="password" class="form-control"
+                          placeholder="enter password" onblur="return validateAddUser();"
+                          onkeyup="return validateAddUser();" required value="<%=user[i].password%>" autofocus />
+                      </div>
+                        <div class="input-container">
+                        <input id="password" type="checkbox" onclick="togglePassword('<%=user[i].id%>');"
+                          style="width: 20px;height:20px; margin-right:5px" />Show Password
+                      </div>
+                      <div class="input-container">
+                        <i class="fa fa-phone icon"></i>
+                        <input class="input-field" type="phone" name="phone" class="form-control"
+                          placeholder="enter phone number" onblur="return validateAddUser();"
+                          onkeyup="return validateAddUser();" value="<%=user[i].phone%>" required />
+                      </div>
+                      <div class="input-container">
+                        <i>Gender:</i>
+                        <input class="radio" type="radio" name="gender" class="form-radio" value="male" checked />Male
+                        <input class="radio" type="radio" name="gender" class="form-radio" value="female" />Female
+                      </div>
+                      <small id="help" class="form-text text-muted d-block">select date of birth.</small>
+                      <div class="input-container">
+                        <i class="fa fa icon">DOB</i>
+                        <input class="input-field" type="date" name="DOB" class="form-control"
+                          placeholder="select date of birth" value="<%=user[i].DOB%>" required />
+                      </div>
+                      <div class="input-container">
+                        <i class="fa fa-solid fa-1 icon"></i>
+                        <input class="input-field" type="number" name="employeeNatureId" min="1" class="form-control"
+                          placeholder="enter employee nature ID" onblur="return validateAddUser();"
+                          onkeyup="return validateAddUser();" value="<%=user[i].employeeNatureId%>" required />
+                      </div>
+                      <div class="input-container">
+                        <i class="fa fa-solid fa-1 icon"></i>
+                        <input class="input-field" type="number" name="pensionNumber" min="1" class="form-control"
+                          placeholder="enter pension number" onblur="return validateAddUser();"
+                          onkeyup="return validateAddUser();" value="<%=user[i].pensionNumber%>" required />
+                      </div>
+                      <small id="help" class="form-text text-muted d-block">select date of retirement.</small>
+                      <div class="input-container">
+                        <i class="fa icon">RD</i>
+                        <input class="input-field" type="date" name="retirementDate" class="form-control"
+                          placeholder="select retirement date" value="<%=user[i].retirementDate%>" />
+
+                      </div>
+                      <div class="input-container">
+                        <i>Is Terminated:</i>
+                        <input class="radio" type="radio" name="isTerminated" class="form-radio" value="yes"
+                          checked />Yes
+                        <input class="radio" type="radio" name="isTerminated" class="form-radio" value="no" checked />No
+                      </div>
+                      <div class="input-container">
+                        <i class="fa fa-money-bill icon"></i>
+                        <input class="input-field" type="number" name="salary" min="1000" class="form-control"
+                          placeholder="enter salary" onblur="return validateAddUser();"
+                          onkeyup="return validateAddUser();" value="<%=user[i].salary%>" required />
+                      </div>
+                        <div class="input-container">
+                  <span>Department: </span>
+                  <select name="department" id="role" class="input-field">
+                    <option value="ICT">ICT</option>
+                                    <option  value="Finance">Finance</option>
+                                    <option value="Internal Audit" >Audit</option>
+                                    <option value="General Director" >G/Director</option>
+                                     <option  value="Plan and Program" >Plan & Program</option>
+                                    <option value="Procurment">Procurment</option>
+                                    <option value="Ethics">Ethics
+                                    <option  value="Vaccine and Drug Production">Vaccine & Drug Production</option>
+                                    <option value="Qaulity Assurance">Quality Assurance</option>
+                                     <option  value="Research and Development">Research & Dev</option>
+                                     <option  value="Engineering and Maintenance">Engineering & Maintenance</option>
+                                     <option  value="Marketing">Marketing</option>
+                                    <option  value="HR" >Human Resource</option>
+                  </select>
+                </div>
+                      <div class="input-container">
+                        <i class="fa fa-address-card icon"></i>
+                        <input class="input-field" type="text" name="address" class="form-control"
+                          placeholder="enter address" onblur="return validateAddUser();"
+                          onkeyup="return validateAddUser();" value="<%=user[i].address%>" required />
+                      </div>
+                      <div class="input-container">
+                        <span>Role: </span>
+                        <select name="role" id="role" class="input-field">
+                          <option value="moderator">Moderator</option>
+                          <option value="employee" selected>Employee</option>
+                        </select>
+                      </div>
+                      <div>
+                        <p class="error text-danger" id="error"></p>
+                      </div>
+                      <% if(locals.error) { %>
+                      <div class="alert alert-danger" role="alert"><%= error %></div>
+                      <% } %>
+
+                      <div class="row my-4">
+                        <div class="col">
+                          <button class="btn btn-sm btn-login btn text-center" type="submit">
+                            Update
+                          </button>
+                        </div>
+                        <div class="col text-center">
+                          <button class="btn btn-sm btn-login btn text-center" type="reset">
+                            Reset
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                      Close
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+     <% } %>
+          </tbody>
+        </table>
+        <!-- pagination -->
+        <% if (pageCount > 1) { %>
+        <ul class="pagination text-center ">
+          <% if (currentPage > 1) { %>
+          <li class="mx-2"><a href="/admin?page=1">previous</a></li>
+          <% } %>
+          <% var i = 1;%>
+         <%if (currentPage > 5) {%>
+          i= +(currentPage — 4);
+           <% } %>
+          <% if (i !=1) { %>
+          <li class="disabled" class="mx-2"><a href="#">…</a></li>
+          <% } %>
+          <% for (i=0; i<=pageCount; i++) { %>
+          <% if (currentPage == i) { %>
+          <li class="active mx-2"><span><%= currentPage %> <span class="sr-only">(current)</span></span></li>
+          <% } else { %>
+          <li class="mx-2"><a href="/admin?page=<%= i %>"><%= i %></a></li>
+          <% } %>
+          <% if (i == (currentPage + 4)) { %>
+          <li class="disabled mx-2"><a href="#">…</a></li>
+          <%} %>
+          <% } %>
+          <% if (currentPage != pageCount) { %>
+          <li class="mx-2"><a href="/admin?page = <%= pageCount %>">Next</a></li>
+          <% } %>
+        </ul>
+        <%}%>
+      </div>
+        <%}else{%>
+        <h4 class="text-center text-danger m-4 p-4">Data not found</h4>
+        <%}%>
+      </div>
+      <div class="modal" id="addUser" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title text-center">Add User</h4>
+              <a class="close" data-bs-dismiss="modal" aria-hidden="true">
+                <i class="fa fa-times icon bg-danger text-white"></i>
+              </a>
+            </div>
+            <div class="modal-body">
+              <form
+                name="addUserForm"
+                class="form-signin"
+                action="/admin/user/add"
+                method="post"
+                onsubmit="return(validateAddUser());"
+                role="form"
+                data-toggle="validator"
+              >
+                <div class="input-container">
+                  <i class="fa fa-person icon"></i>
+                  <input
+                    class="input-field"
+                    type="text"
+                    name="firstName"
+                    class="form-control"
+                    placeholder="enter first name"
+                    onblur="return validateAddUser();"
+                    onkeyup="return validateAddUser();"
+                    required
+                    autofocus
+                  />
+                </div>
+                <div class="input-container">
+                  <i class="fa fa-person icon"></i>
+                  <input
+                    class="input-field"
+                    type="text"
+                    name="lastName"
+                    class="form-control"
+                    placeholder="enter last name"
+                    onblur="return validateAddUser();"
+                    onkeyup="return validateAddUser();"
+                    required
+                    autofocus
+                  />
+                </div>
+                <div class="input-container">
+                  <i class="fa fa-envelope icon"></i>
+                  <input
+                    class="input-field"
+                    type="email"
+                    name="email"
+                    class="form-control"
+                    placeholder="enter email address"
+                    onblur="return validateAddUser();"
+                    onkeyup="return validateAddUser();"
+                    required
+                    autofocus
+                  />
+                </div>
+                <div class="input-container">
+                  <i class="fa fa-lock icon"></i>
+                  <input
+                    class="input-field"
+                    id="oldPassword"
+                    type="password"
+                    name="password"
+                    class="form-control"
+                    placeholder="enter password"
+                    onblur="return validateAddUser();"
+                    onkeyup="return validateAddUser();"
+                    required
+                  />
+                </div>
+                 <div class="input-container">
+                        <input id="password" type="checkbox" onclick="togglePassword();"
+                          style="width: 20px;height:20px; margin-right:5px" />Show Password
+                      </div>
+                <div class="input-container">
+                  <i class="fa fa-phone icon"></i>
+                  <input
+                    class="input-field"
+                    type="phone"
+                    name="phone"
+                    class="form-control"
+                    placeholder="enter phone number"
+                    onblur="return validateAddUser();"
+                    onkeyup="return validateAddUser();"
+                    required
+                  />
+                </div>
+                <div class="input-container">
+                  <i>Gender:</i>
+                  <input
+                    class="radio"
+                    type="radio"
+                    name="gender"
+                    class="form-radio"
+                    value="male"
+                    checked
+                  />Male
+                  <input
+                    class="radio"
+                    type="radio"
+                    name="gender"
+                    class="form-radio"
+                    value="female"
+                  />Female
+                </div>
+                               <small id="help" class="form-text text-muted d-block">select date of birth.</small>
+                <div class="input-container">
+                  <i class="fa fa icon">DOB</i>
+                  <input
+                    class="input-field"
+                    type="date"
+                    name="DOB"
+                    class="form-control"
+                    placeholder="select date of birth"
+                    value=""
+                    required
+                  />
+                </div>
+                <div class="input-container">
+                  <i class="fa fa-solid fa-1 icon"></i>
+                  <input
+                    class="input-field"
+                    type="number"
+                    name="employeeNatureId"
+                    min="1"
+                    class="form-control"
+                    placeholder="enter employee nature ID"
+                    onblur="return validateAddUser();"
+                    onkeyup="return validateAddUser();"
+                    required
+                  />
+                </div>
+                <div class="input-container">
+                  <i class="fa fa-solid fa-1 icon"></i>
+                  <input
+                    class="input-field"
+                    type="number"
+                    name="pensionNumber"
+                    min="1"
+                    class="form-control"
+                    placeholder="enter pension number"
+                    onblur="return validateAddUser();"
+                    onkeyup="return validateAddUser();"
+                    required
+                  />
+                </div>
+                   <small id="help" class="form-text text-muted d-block">select date of retirement.</small>
+                <div class="input-container">
+                  <i class="fa icon">RD</i>
+                  <input
+                    class="input-field"
+                    type="date"
+                    name="retirementDate"
+                    class="form-control"
+                    placeholder="select retirement date"
+                    value=""
+                    
+                  />
+
+                </div>
+                <div class="input-container">
+                  <i>Is Terminated:</i>
+                  <input
+                    class="radio"
+                    type="radio"
+                    name="isTerminated"
+                    class="form-radio"
+                    value="yes"
+                    checked
+                  />Yes
+                  <input
+                    class="radio"
+                    type="radio"
+                    name="isTerminated"
+                    class="form-radio"
+                    value="no"
+                  />No
+                </div>
+                <div class="input-container">
+                  <i class="fa fa-money-bill icon"></i>
+                  <input
+                    class="input-field"
+                    type="number"
+                    name="salary"
+                    min="1000"
+                    class="form-control"
+                    placeholder="enter salary"
+                    onblur="return validateAddUser();"
+                    onkeyup="return validateAddUser();"
+                    required
+                  />
+                </div>
+                <div class="input-container">
+                  <span>Department: </span>
+                  <select name="department" id="role" class="input-field">
+                    <option value="ICT">ICT</option>
+                                    <option  value="Finance">Finance</option>
+                                    <option value="Internal Audit" >Audit</option>
+                                    <option value="General Director" >G/Director</option>
+                                     <option  value="Plan and Program" >Plan & Program</option>
+                                    <option value="Procurment">Procurment</option>
+                                    <option value="Ethics">Ethics
+                                    <option  value="Vaccine and Drug Production">Vaccine & Drug Production</option>
+                                    <option value="Qaulity Assurance">Quality Assurance</option>
+                                     <option  value="Research and Development">Research & Dev</option>
+                                     <option  value="Engineering and Maintenance">Engineering & Maintenance</option>
+                                     <option  value="Marketing">Marketing</option>
+                                    <option  value="HR" >Human Resource</option>
+                  </select>
+                </div>
+                <div class="input-container">
+                  <i class="fa fa-address-card icon"></i>
+                  <input
+                    class="input-field"
+                    type="text"
+                    name="address"
+                    class="form-control"
+                    placeholder="enter address"
+                    onblur="return validateAddUser();"
+                    onkeyup="return validateAddUser();"
+                    value=""
+                    required
+                  />
+                </div>
+                <div class="input-container">
+                  <span>Role: </span>
+                  <select name="role" id="role" class="input-field">
+                    <option value="moderator">Moderator</option>
+                    <option value="employee" selected>Employee</option>
+                  </select>
+                </div>
+                <div><p class="error text-danger" id="error"></p></div>
+                <% if(locals.error) { %>
+        <div class="alert alert-danger" role="alert"><%= error %></div>
+        <% } %>
+
+        <div class="row my-4">
+          <div class="col">
+            <button class="btn btn-sm btn-login btn text-center" type="submit">
+              Add
+            </button>
+          </div>
+          <div class="col text-center">
+            <button class="btn btn-sm btn-login btn text-center" type="reset">
+              Reset
+            </button>
+          </div>
+        </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+    </div>
+    </div>
+    <div class="modal" id="addEvent" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title text-center">Add Event</h4>
+            <a class="close" data-bs-dismiss="modal" aria-hidden="true">
+              <i class="fa fa-times icon bg-danger text-white"></i>
+            </a>
+          </div>
+          <div class="modal-body">
+            <form name="addEventForm" class="form-signin" action="/admin/event/add" method="post"
+              onsubmit="return(validateAddUser());" role="form" data-toggle="validator" enctype="multipart/form-data">
+              <div class="input-container">
+                <input class="input-field" type="text" name="title" class="form-control" placeholder="enter event title"
+                  value="" required autofocus />
+              </div>
+              <div class="input-container">
+                <!-- <i class="fa fa-description icon"></i> -->
+                <textarea name="content" rows="4" class="form-control" placeholder="enter content here" value=""
+                  autofocus></textarea>
+              </div>
+              <div class="input-container">
+                <i class="fa fa-file icon"></i>
+                <input class="input-field" type="file" name="file" class="form-control" placeholder="import event file"
+                  accept=".jpeg,.jpg,.png,.gif" value="" autofocus />
+              </div>
+              <small id="help" class="form-text text-muted d-block">select event date.</small>
+              <div class="input-container">
+                <i class="fa fa icon">ED</i>
+                <input class="input-field" type="date" name="eventDate" class="form-control"
+                  placeholder="select event date" value="" required />
+              </div>
+              <div class="row my-4">
+                <div class="col">
+                  <button class="btn btn-sm btn-login btn-danger text-center" type="submit">
+                    Add
+                  </button>
+                </div>
+                <div class="col text-center">
+                  <button class="btn btn-sm btn-login btn text-center" type="reset">
+                    Reset
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+      <div class="modal" id="addNews" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title text-center">Add News</h4>
+            <a class="close" data-bs-dismiss="modal" aria-hidden="true">
+              <i class="fa fa-times icon bg-danger text-white"></i>
+            </a>
+          </div>
+          <div class="modal-body">
+            <form name="addNewsFOrm" class="form-signin" action="/admin/news/add" method="post"
+              role="form" data-toggle="validator">
+              <div class="input-container">
+                <input class="input-field" type="text" name="title" class="form-control" placeholder="enter news title"
+                  value="" required autofocus />
+              </div>
+              <div class="input-container">
+                <!-- <i class="fa fa-description icon"></i> -->
+                <textarea name="content" rows="4" class="form-control" placeholder="enter content here" value=""
+                  autofocus></textarea>
+              </div>
+              <div class="row my-4">
+                <div class="col">
+                  <button class="btn btn-sm btn-login btn-danger text-center" type="submit">
+                    Add
+                  </button>
+                </div>
+                <div class="col text-center">
+                  <button class="btn btn-sm btn-login btn text-center" type="reset">
+                    Reset
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="importData" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title text-center">Import Data</h4>
+            <a class="close" data-bs-dismiss="modal" aria-hidden="true">
+              <i class="fa fa-times icon bg-danger text-white"></i>
+            </a>
+          </div>
+          <div class="modal-body">
+            <form name="importData" class="form" action="/admin/import-data" method="post" role="form"
+              data-toggle="validator">
+              <i class="text-secondary text-disabled m-0 p-0">enter table name start in capital letter like: User</i>
+              <div class="input-container">
+                <i class="fa fa-envelope icon"></i>
+                <input class="input-field" type="text" name="tableName" class="form-control"
+                  placeholder="enter table name" value="" required autofocus />
+              </div>
+              <div class="input-container">
+                <i class="fa fa-file icon"></i>
+                <input class="input-field" type="file" name="file" class="form-control" placeholder="import file"
+                  accept=".csv" autofocus />
+              </div>
+              <div class="row my-4">
+                <div class="col">
+                  <button class="btn btn-sm btn-login btn-danger text-center" type="submit">
+                    Upload
+                  </button>
+                </div>
+                <div class="col text-center">
+                  <button class="btn btn-sm btn-login btn text-center" type="reset">
+                    Reset
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% if (locals.message && locals.message!='') { %>
+    <script language="javascript">
+      alert( "<%= message %>" );
+    </script>
+    <% } %>
+
+  </main>
+  <%- include('./partials/footer'); %>
+</body>
+
+</html>

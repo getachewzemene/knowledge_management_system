@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+      integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="/js/form_validator.js"></script>
+    <title>Login</title>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-lg index_header text-light">
+        <div class="container-fluid">
+          <div class="navbar-nav text-light index-nav">
+            <a href="/" class="nav-item nav-link">Dashboard</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div
+      class="mx-auto col-md-offset-4 col-md-4 col-lg-offset-4 col-lg-4"
+      style="padding-top: 60px"
+    >
+      <div class="card text-center">
+        <div class="card-header">
+          <h4>Login</h4>
+        </div>
+        <div class="card-body">
+          <form
+            class="form-signin"
+            name="loginForm"
+            action="/login"
+            method="post"
+            role="form"
+            onsubmit="return validateLogin();"
+            data-toggle="validator"
+          >
+            <input
+              type="hidden"
+              name="frm_referring_url"
+              value="{{ referring_url }}"
+            />
+            <h5 class="form-signin-heading">Please login here!</h5>
+            <div class="input-container">
+              <i class="fa fa-envelope icon"></i>
+              <input
+                class="input-field"
+                type="email"
+                name="email"
+                class="form-control"
+                placeholder="enter email address"
+                onblur="return validateLogin();"
+                onkeyup="return validateLogin();"
+                required
+                autofocus
+              />
+            </div>
+            <div class="input-container my-4">
+              <i class="fa fa-lock icon"></i>
+              <input
+                class="input-field"
+                type="password"
+                name="password"
+                class="form-control"
+                placeholder="enter password"
+                onblur="return validateLogin();"
+                onkeyup="return validateLogin();"
+                required
+              />
+            </div>
+            <p class="error text-danger" id="error"></p>
+            <% if(locals.error) { %>
+            <div class="alert alert-danger" role="alert"><%= error %></div>
+            <% } %>
+            <div class="row my-4">
+              <div class="col">
+                <button
+                  class="btn btn-sm btn-login btn text-center"
+                  type="submit"
+                >
+                  Login
+                </button>
+              </div>
+              <div class="col text-center">
+                <button
+                  class="btn btn-sm btn-login btn text-center"
+                  type="reset"
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <footer><%- include('./partials/footer'); %></footer>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <!-- <script src="js/login_modal.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"></script>
+  </body>
+</html>
